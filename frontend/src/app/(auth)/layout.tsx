@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/src/app/globals.css";
+import ReactQueryProvider from "../(main)/providers/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Setu – Fund Hope. Change Nepal.",
@@ -17,7 +18,9 @@ export default function AuthLayout({
     <html lang="en">
       <head></head>
       <body className="antialiased">
-        <main>{children}</main>
+        <ReactQueryProvider>
+          <main>{children}</main>
+        </ReactQueryProvider>
       </body>
     </html>
   );

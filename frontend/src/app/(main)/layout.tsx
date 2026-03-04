@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/src/app/globals.css";
 import { Navbar } from "@/src/components/navbar";
 import { Footer } from "@/src/components/footer";
+import ReactQueryProvider from "@/src/app/(main)/providers/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Setu – Fund Hope. Change Nepal.",
@@ -20,9 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <head></head>
       <body className="antialiased">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <ReactQueryProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </ReactQueryProvider>
       </body>
     </html>
   );
