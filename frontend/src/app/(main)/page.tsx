@@ -76,18 +76,6 @@ const campaigns = [
   },
   {
     id: "5",
-    title: "Music Therapy for Special Needs Kids",
-    desc: "Helping children with autism find their voice through the healing power of music therapy.",
-    img: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&q=80&auto=format&fit=crop",
-    raised: 38900,
-    goal: 80000,
-    donors: 156,
-    cat: "Education",
-    catClass: "education",
-    location: "Pokhara",
-  },
-  {
-    id: "6",
     title: "Kathmandu Animal Rescue Shelter",
     desc: "Renovating facilities to provide better care and medical attention for 300+ rescued animals.",
     img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&q=80&auto=format&fit=crop",

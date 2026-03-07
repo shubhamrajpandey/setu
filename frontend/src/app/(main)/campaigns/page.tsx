@@ -4,21 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   Search,
-  Filter,
   MapPin,
   Users,
   ChevronRight,
-  Zap,
-  Heart,
-  Eye,
-  Package,
   ShieldCheck,
   SlidersHorizontal,
   ArrowRight,
   TrendingUp,
-  Clock,
-  Star,
+  Heart,
 } from "lucide-react";
+import { CampaignCard } from "@/src/components/campaign-card";
 
 const campaigns = [
   {
@@ -143,47 +138,6 @@ const campaigns = [
   },
 ];
 
-const catConfig: Record<
-  string,
-  { bg: string; text: string; border: string; icon: any; color: string }
-> = {
-  medical: {
-    bg: "bg-red-50",
-    text: "text-red-700",
-    border: "border-red-100",
-    icon: Heart,
-    color: "text-red-500",
-  },
-  education: {
-    bg: "bg-blue-50",
-    text: "text-blue-700",
-    border: "border-blue-100",
-    icon: Eye,
-    color: "text-blue-500",
-  },
-  emergency: {
-    bg: "bg-orange-50",
-    text: "text-orange-700",
-    border: "border-orange-100",
-    icon: Zap,
-    color: "text-orange-500",
-  },
-  charity: {
-    bg: "bg-setu-50",
-    text: "text-setu-700",
-    border: "border-setu-200",
-    icon: Users,
-    color: "text-setu-500",
-  },
-  animals: {
-    bg: "bg-purple-50",
-    text: "text-purple-700",
-    border: "border-purple-100",
-    icon: ShieldCheck,
-    color: "text-purple-500",
-  },
-};
-
 const categories = [
   "All",
   "Emergency",
@@ -198,83 +152,6 @@ const sortOptions = [
   "Urgent First",
   "Ending Soon",
 ];
-
-function CampaignCard({ c }: { c: (typeof campaigns)[0] }) {
-  const pct = Math.min(Math.round((c.raised / c.goal) * 100), 100);
-  const cfg = catConfig[c.catClass] ?? catConfig.charity;
-  return (
-    <Link
-      href={`/campaigns/${c.id}`}
-      className="group block bg-white rounded-2xl overflow-hidden border border-setu-100 shadow-[0_2px_12px_rgba(21,104,57,0.06)] hover:shadow-[0_20px_48px_rgba(21,104,57,0.14)] hover:-translate-y-1.5 hover:border-setu-200 transition-all duration-300"
-    >
-      <div className="relative h-52 overflow-hidden">
-        <img
-          src={c.img}
-          alt={c.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        <span
-          className={`absolute top-3 left-3 text-[11px] font-bold px-3 py-1 rounded-full border uppercase tracking-wide ${cfg.bg} ${cfg.text} ${cfg.border}`}
-        >
-          {c.cat}
-        </span>
-        {c.urgent && (
-          <span className="absolute top-3 right-3 flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-red-500 text-white">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            Urgent
-          </span>
-        )}
-        <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white/90 text-[11px] font-medium px-2.5 py-1 rounded-full">
-          <MapPin className="w-3 h-3" />
-          {c.location}
-        </div>
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/40 backdrop-blur-sm text-white/90 text-[11px] font-medium px-2.5 py-1 rounded-full">
-          <Clock className="w-3 h-3" />
-          {c.daysLeft}d left
-        </div>
-      </div>
-      <div className="p-5">
-        <h3
-          className="font-bold text-[15px] text-setu-950 leading-snug mb-2 group-hover:text-setu-700 transition-colors line-clamp-2"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {c.title}
-        </h3>
-        <p className="text-[13px] text-gray-500 leading-relaxed mb-4 line-clamp-2">
-          {c.desc}
-        </p>
-        <div className="h-1.5 bg-setu-100 rounded-full overflow-hidden mb-2">
-          <div
-            className="h-full bg-gradient-to-r from-setu-700 to-setu-400 rounded-full transition-all duration-700"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
-        <div className="flex justify-between items-center text-[13px] mb-4">
-          <span>
-            <strong className="text-setu-800 font-bold">
-              NPR {c.raised.toLocaleString()}
-            </strong>
-            <span className="text-gray-400 ml-1">
-              of {c.goal.toLocaleString()}
-            </span>
-          </span>
-          <strong className="text-setu-600 font-bold">{pct}%</strong>
-        </div>
-        <div className="flex items-center justify-between pt-3.5 border-t border-setu-50">
-          <div className="flex items-center gap-1.5 text-[12px] text-gray-500 font-medium">
-            <Users className="w-3.5 h-3.5 text-setu-400" />
-            {c.donors.toLocaleString()} donors
-          </div>
-          <span className="flex items-center gap-1.5 px-4 py-2 bg-setu-700 group-hover:bg-setu-600 text-white text-[12px] font-bold rounded-full transition-colors duration-200">
-            Donate Now
-            <ChevronRight className="w-3.5 h-3.5" />
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 export default function CampaignsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -295,36 +172,147 @@ export default function CampaignsPage() {
       style={{ fontFamily: "var(--font-body)" }}
     >
       {/* ── PAGE HERO ── */}
-      <section className="bg-white border-b border-setu-100 py-14">
+      <section className="bg-white border-b border-setu-100 py-14 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-setu-600 mb-4">
-              <div className="w-6 h-[2px] bg-setu-500 rounded" />
-              Browse All Causes
-            </div>
-            <h1
-              className="text-[clamp(34px,4vw,54px)] font-bold text-setu-950 leading-tight tracking-[-1px] mb-4"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Find a Campaign
-              <br />
-              <em className="italic text-setu-600">Worth Fighting For</em>
-            </h1>
-            <p className="text-[16px] text-setu-800/55 leading-[1.75] mb-8 max-w-lg">
-              From disaster relief to education, browse verified campaigns
-              making a real difference across Nepal.
-            </p>
+          <div className="flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-16">
+            {/* Left: text + search */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-setu-600 mb-4">
+                <div className="w-6 h-[2px] bg-setu-500 rounded" />
+                Browse All Causes
+              </div>
+              <h1
+                className="text-[clamp(34px,4vw,54px)] font-bold text-setu-950 leading-tight tracking-[-1px] mb-4"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Find a Campaign
+                <br />
+                <em className="italic text-setu-600">Worth Fighting For</em>
+              </h1>
+              <p className="text-[16px] text-setu-800/55 leading-[1.75] mb-8 max-w-lg">
+                From disaster relief to education, browse verified campaigns
+                making a real difference across Nepal.
+              </p>
 
-            {/* Search bar */}
-            <div className="relative max-w-xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-setu-400" />
-              <input
-                type="text"
-                placeholder="Search campaigns, locations..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-setu-50 border border-setu-200 rounded-full text-[14px] text-setu-900 placeholder:text-setu-400 focus:outline-none focus:border-setu-500 focus:ring-2 focus:ring-setu-500/20 transition-all"
-              />
+              {/* Search bar */}
+              <div className="relative max-w-xl mb-6">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-setu-400" />
+                <input
+                  type="text"
+                  placeholder="Search campaigns, locations..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3.5 bg-setu-50 border border-setu-200 rounded-full text-[14px] text-setu-900 placeholder:text-setu-400 focus:outline-none focus:border-setu-500 focus:ring-2 focus:ring-setu-500/20 transition-all"
+                />
+              </div>
+
+              {/* CTAs */}
+              <div className="flex items-center gap-3 flex-wrap">
+                <Link
+                  href="/campaigns/create"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-setu-700 hover:bg-setu-600 text-white text-[14px] font-bold rounded-full no-underline shadow-[0_4px_14px_rgba(21,104,57,0.35)] hover:shadow-[0_6px_22px_rgba(21,104,57,0.4)] hover:-translate-y-px transition-all duration-200"
+                >
+                  Start a Campaign <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 border border-setu-200 text-setu-700 text-[14px] font-semibold rounded-full no-underline hover:bg-setu-50 hover:border-setu-400 transition-all duration-200"
+                >
+                  How It Works
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Nepal campaign image collage */}
+            <div className="hidden lg:block flex-shrink-0 w-[440px]">
+              <div className="relative h-[320px]">
+                {/* Main large image */}
+                <div className="absolute left-0 top-0 w-[260px] h-[280px] rounded-2xl overflow-hidden shadow-[0_8px_32px_rgba(21,104,57,0.18)] border-4 border-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=85&auto=format&fit=crop"
+                    alt="Flood relief Nepal"
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Urgent badge */}
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-red-500 text-white text-[10px] font-bold rounded-full">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                    Urgent
+                  </div>
+                  {/* Progress overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-3">
+                    <p className="text-white text-[11px] font-bold truncate mb-1.5">
+                      Koshi Flood Relief 2024
+                    </p>
+                    <div className="h-1 bg-white/30 rounded-full overflow-hidden">
+                      <div className="h-full w-[72%] bg-setu-400 rounded-full" />
+                    </div>
+                    <div className="flex justify-between mt-1">
+                      <span className="text-white/80 text-[10px]">
+                        NPR 3.6L raised
+                      </span>
+                      <span className="text-setu-300 text-[10px] font-bold">
+                        72%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top-right smaller image */}
+                <div className="absolute right-0 top-0 w-[165px] h-[150px] rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(21,104,57,0.15)] border-4 border-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&q=80&auto=format&fit=crop"
+                    alt="Education Nepal"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-2.5 py-2">
+                    <p className="text-white text-[10px] font-bold truncate">
+                      School for Dolakha
+                    </p>
+                  </div>
+                </div>
+
+                {/* Bottom-right smaller image */}
+                <div className="absolute right-0 bottom-0 w-[165px] h-[150px] rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(21,104,57,0.15)] border-4 border-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=400&q=80&auto=format&fit=crop"
+                    alt="Medical Nepal"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-2.5 py-2">
+                    <p className="text-white text-[10px] font-bold truncate">
+                      Help Sunita Beat Cancer
+                    </p>
+                  </div>
+                </div>
+
+                {/* Floating donor count pill */}
+                <div className="absolute bottom-[148px] right-[148px] translate-x-1/2 translate-y-1/2 z-10 bg-white rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)] border border-setu-100 px-3 py-2 flex items-center gap-2">
+                  <div className="flex -space-x-1.5">
+                    {[11, 12, 13].map((i) => (
+                      <img
+                        key={i}
+                        src={`https://i.pravatar.cc/24?img=${i}`}
+                        className="w-6 h-6 rounded-full border-2 border-white object-cover"
+                        alt=""
+                      />
+                    ))}
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-setu-950 leading-none">
+                      18,400+
+                    </p>
+                    <p className="text-[9px] text-gray-400 leading-none mt-0.5">
+                      donors
+                    </p>
+                  </div>
+                </div>
+
+                {/* Verified badge */}
+                <div className="absolute top-[72px] left-[248px] z-10 bg-setu-700 text-white rounded-xl shadow-[0_4px_16px_rgba(21,104,57,0.3)] px-3 py-2 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" />
+                  <p className="text-[11px] font-bold leading-none">Verified</p>
+                </div>
+              </div>
             </div>
           </div>
 
